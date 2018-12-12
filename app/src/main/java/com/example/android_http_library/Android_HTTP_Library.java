@@ -1,7 +1,9 @@
 package com.example.android_http_library;
 
 import android.app.Activity;
+import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,7 +43,8 @@ public class Android_HTTP_Library {
 
                     final int responseCode = urlConn.getResponseCode();
                     if (responseCode == 200){
-                        String getResult = StreamToString(urlConn.getInputStream());
+                        final String result  = StreamToString(urlConn.getInputStream());
+
                     }else{
 
                     }
@@ -54,7 +57,21 @@ public class Android_HTTP_Library {
     }
 
     public static String StreamToString(InputStream inputStream){
-        return "";
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while((len = inputStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            baos.close();
+            inputStream.close();
+            byte[] byteArr = baos.toByteArray();
+            return new String(byteArr);
+        } catch (Exception e) {
+            Log.e("StreamToString", e.toString());
+            return null;
+        }
     }
 
     public interface HttpListener{
