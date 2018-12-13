@@ -44,11 +44,24 @@ public class Android_HTTP_Library {
                     final int responseCode = urlConn.getResponseCode();
                     if (responseCode == 200){
                         final String result  = StreamToString(urlConn.getInputStream());
+                        if(result != null) {
+                            if(httpListener != null) {
 
+                            }
+                            Log.e("http_request_GET", "Get Request Success, result ---> " + result);
+                        }else {
+                            if(httpListener != null) {
+
+                            }
+                            Log.e("http_request_GET", "Get Request get null data");
+                        }
                     }else{
+                        if(httpListener != null) {
 
+                        }
+                        Log.e("http_request_GET", "Get Request Fail");
                     }
-
+                    urlConn.disconnect();
                 } catch (final Exception e){
 
                 }
@@ -75,8 +88,8 @@ public class Android_HTTP_Library {
     }
 
     public interface HttpListener{
-        public void onHttpSuccess();
-
-
+        public void onHttpSuccess(String data);
+        public void onHttpFail(String failInfo);
+        public void onHttpNull();
     }
 }
