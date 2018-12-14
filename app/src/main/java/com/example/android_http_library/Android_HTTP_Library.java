@@ -63,7 +63,17 @@ public class Android_HTTP_Library {
                     }
                     urlConn.disconnect();
                 } catch (final Exception e){
-
+                    if (httpListener != null) {
+                        activity.runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        httpListener.onHttpFail("Fail! Connect Exception:" + e);
+                                    }
+                                }
+                        );
+                    }
+                    Log.e("requestGet", e.toString());
                 }
             }
         }.start();
