@@ -46,18 +46,39 @@ public class Android_HTTP_Library {
                         final String result  = StreamToString(urlConn.getInputStream());
                         if(result != null) {
                             if(httpListener != null) {
-
+                                activity.runOnUiThread(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            httpListener.onHttpSuccess(result);
+                                        }
+                                    }
+                                );
                             }
                             Log.e("http_request_GET", "Get Request Success, result ---> " + result);
                         }else {
                             if(httpListener != null) {
-
+                                activity.runOnUiThread(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            httpListener.onHttpNull();
+                                        }
+                                    }
+                                );
                             }
                             Log.e("http_request_GET", "Get Request get null data");
                         }
                     }else{
                         if(httpListener != null) {
-
+                            activity.runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        httpListener.onHttpFail("Fail! responseCode: " + responseCode);
+                                    }
+                                }
+                            );
                         }
                         Log.e("http_request_GET", "Get Request Fail");
                     }
@@ -65,15 +86,15 @@ public class Android_HTTP_Library {
                 } catch (final Exception e){
                     if (httpListener != null) {
                         activity.runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        httpListener.onHttpFail("Fail! Connect Exception:" + e);
-                                    }
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    httpListener.onHttpFail("Fail! Connect Exception: " + e);
                                 }
+                            }
                         );
                     }
-                    Log.e("requestGet", e.toString());
+                    Log.e("http_request_GET", e.toString());
                 }
             }
         }.start();
