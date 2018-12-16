@@ -100,6 +100,18 @@ public class Android_HTTP_Library {
         }.start();
     }
 
+    public static void http_request_POST(final Activity activity, final String address, final HashMap<String, String> paramsMap, final HttpListener httpListener) {
+        new Thread() {
+            public void run() {
+                try {
+                    StringBuilder params = new StringBuilder();
+                } catch (final Exception e) {
+
+                }
+            }
+        }.start();
+    }
+
     public static String StreamToString(InputStream inputStream){
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
