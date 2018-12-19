@@ -104,7 +104,14 @@ public class Android_HTTP_Library {
         new Thread() {
             public void run() {
                 try {
-                    StringBuilder params = new StringBuilder();
+                    StringBuilder tempParams = new StringBuilder();
+                    int tag = 0;
+                    for (String key : paramsMap.keySet()) {
+                        if (tag > 0) {
+                            tempParams.append("&");
+                        }
+                        tempParams.append(String.format());
+                    }
                 } catch (final Exception e) {
 
                 }
