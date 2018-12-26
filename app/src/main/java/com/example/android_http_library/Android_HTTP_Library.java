@@ -105,7 +105,46 @@ public class Android_HTTP_Library {
         new Thread() {
             public void run() {
                 try {
-                    
+                    StringBuilder tempParams = new StringBuilder();
+                    int tag = 0;
+                    for (String key : paramsMap.keySet()) {
+                        if (tag > 0) {
+                            tempParams.append("&");
+                        }
+                        tempParams.append(String.format("%s=%s", key, URLEncoder.encode(paramsMap.get(key), "utf-8")));
+                    }
+                    String params = tempParams.toString();
+                    // 请求的参数转换为byte数组
+                    byte[] postData = params.getBytes();
+                    // 新建一个URL对象
+                    URL url = new URL(address);
+                    // 打开一个HttpURLConnection连接
+                    HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+                    // 设置连接超时时间
+                    urlConn.setConnectTimeout(5 * 1000);
+                    //设置从主机读取数据超时
+                    urlConn.setReadTimeout(5 * 1000);
+                    // Post请求必须设置允许输出 默认false
+                    urlConn.setDoOutput(true);
+                    //设置请求允许输入 默认是true
+                    urlConn.setDoInput(true);
+                    // Post请求不能使用缓存
+                    urlConn.setUseCaches(false);
+                    // 设置为Post请求
+                    urlConn.setRequestMethod("POST");
+                    //设置本次连接是否自动处理重定向
+                    urlConn.setInstanceFollowRedirects(true);
+                    // 配置请求Content-Type
+                    urlConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    // 开始连接
+                    urlConn.connect();
+                    // 发送请求参数
+                    DataOutputStream dos = new DataOutputStream(urlConn.getOutputStream());
+                    dos.write(postData);
+                    dos.flush();
+                    dos.close();
+                    // 向Listener返回请求成败
+                    final int responseCode = urlConn.getResponseCode();
                 } catch (final Exception e) {
                     if (httpListener != null) {
                         activity.runOnUiThread(
